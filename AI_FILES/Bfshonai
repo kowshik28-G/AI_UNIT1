@@ -1,0 +1,45 @@
+from collections import deque
+
+start = {'A': [3, 2, 1], 'B': [], 'C': []}
+goal = {'A': [], 'B': [], 'C': [3, 2, 1]}
+
+def clone(state):
+    return {k: v[:] for k, v in state.items()}
+
+def get_state_tuple(state):
+    return (tuple(state['A']), tuple(state['B']), tuple(state['C']))
+
+def bfs_hanoi():
+    q = deque()
+    q.append((start, []))
+    visited = set()
+
+    while q:
+        state, path = q.popleft()
+        t = get_state_tuple(state)
+
+        if t in visited:
+            continue
+        visited.add(t)
+
+        if t == get_state_tuple(goal):
+            return path
+
+        for s in 'ABC':
+            if not state[s]:
+                continue
+            disk = state[s][-1]
+            for d in 'ABC':
+                if s == d:
+                    continue
+                if not state[d] or state[d][-1] > disk:
+                    new_state = clone(state)
+                    new_state[s].pop()
+                    new_state[d].append(disk)
+                    q.append((new_state, path + [f"Move Disk {disk} from {s} → {d}"]))
+
+solution = bfs_hanoi()
+
+print("BFS Solution:")
+for i, step in enumerate(solution, 1):
+    print(f"{i}. {step}")
