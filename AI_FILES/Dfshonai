@@ -1,0 +1,14 @@
+def dfs_hanoi(n, source, auxiliary, target, moves):
+    if n == 1:
+        moves.append(f"Move Disk 1 → {target}")
+        return
+    dfs_hanoi(n-1, source, target, auxiliary, moves)
+    moves.append(f"Move Disk {n} → {target}")
+    dfs_hanoi(n-1, auxiliary, source, target, moves)
+
+moves = []
+dfs_hanoi(3, 'A', 'B', 'C', moves)
+
+print("DFS Solution:\n")
+for i, step in enumerate(moves, 1):
+    print(i, step)
